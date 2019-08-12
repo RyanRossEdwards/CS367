@@ -1,3 +1,6 @@
+%% To run with 
+%% $ gprolog --consult-file einstein.pl
+
 :- use_module(library(lists)).  %% to load permutation/2
 
 
@@ -32,12 +35,12 @@ smokes([pallmall, dunhill, bluemaster, prince, blend]).
 /*
    This is the actual encoding of the clues 
 */
-solve(Solution) :-
+solution(Persons) :-
     /*
-      Solution is the variable containing the person data items for
+      Persons is the variable containing the person data items for
       each person in the puzzle
       */
-    Solution = [Brit, Swede, Dane, German, Norwegian],
+    Persons = [Brit, Swede, Dane, German, Norwegian],
 
 
     /*
@@ -73,12 +76,12 @@ solve(Solution) :-
 
     %% clue 4 - the green house is on the left of the white house
     person_HouseColor(Green, green),
-    member(Green, Solution),
+    member(Green, Persons),
     person_HouseNo(Green, GreenHouseNo),
     member(GreenHouseNo, HouseNos),
 
     person_HouseColor(White, white),
-    member(White, Solution),
+    member(White, Persons),
     person_HouseNo(White, WhiteHouseNo),
     member(WhiteHouseNo, HouseNos),
 
@@ -91,7 +94,7 @@ solve(Solution) :-
     %% (GreenHouseNo is WhiteHouseNo +1;
     %% GreenHouseNo is WhiteHouseNo -1),
    
-    %% Assuming left is the house closer to the first house
+    %% Assuming left is the house closer to the first house (first houseNo = 0)
 
     GreenHouseNo is WhiteHouseNo -1,
 
@@ -99,23 +102,23 @@ solve(Solution) :-
 
     %% clue 5 - the green house’s owner drinks coffee
     person_HouseColor(Green, green),
-    member(Green, Solution),
+    member(Green, Persons),
     person_Drink(Green, coffee),
 
     %% clue 6 - the person who smokes Pall Mall rears birds
     person_Smoke(Pallmall, pallmall),
-    member(Pallmall, Solution),
+    member(Pallmall, Persons),
     person_Pet(Pallmall, bird),
 
     %% clue 7 - the owner of the yellow house smokes Dunhill
     person_HouseColor(Yellow, yellow),
-    member(Yellow, Solution),
+    member(Yellow, Persons),
     person_Smoke(Yellow, dunhill),
 
     %% clue 8 - the man living in the center house drinks milk
     %% House No are [0,1,2,3,4] so 2 is the middle house
     person_Drink(Milk, milk),
-    member(Milk, Solution),
+    member(Milk, Persons),
     person_HouseNo(Milk, 2),
 
     %% clue 9 - the Norwegian lives in the first house
@@ -123,12 +126,12 @@ solve(Solution) :-
 
     %% clue 10 - the man who smokes blend lives next to the one who keeps cats
     person_Smoke(Blend, blend),
-    member(Blend, Solution),
+    member(Blend, Persons),
     person_HouseNo(Blend, BlendHouseNo),
     member(BlendHouseNo, HouseNos),
 
     person_Pet(Cat, cat),
-    member(Cat, Solution),
+    member(Cat, Persons),
     person_HouseNo(Cat, CatHouseNo),
     member(CatHouseNo, HouseNos),
 
@@ -137,12 +140,12 @@ solve(Solution) :-
 
     %% clue 11 - the man who has a horse lives next to the man who smokes Dunhill
     person_Pet(Horse, horse),
-    member(Horse, Solution),
+    member(Horse, Persons),
     person_HouseNo(Horse, HorseHouseNo),
     member(HorseHouseNo, HouseNos),
 
     person_Smoke(Dunhill, dunhill),
-    member(Dunhill, Solution),
+    member(Dunhill, Persons),
     person_HouseNo(Dunhill, DunhillHouseNo),
     member(DunhillHouseNo, HouseNos),
 
@@ -151,7 +154,7 @@ solve(Solution) :-
 
     %% clue 12 - the owner who smokes BlueMaster drinks beer
     person_Smoke(Bluemaster, bluemaster),
-    member(Bluemaster, Solution),
+    member(Bluemaster, Persons),
     person_Drink(Bluemaster, beer),
 
     %% clue 13 - the German smokes Prince
@@ -159,7 +162,7 @@ solve(Solution) :-
 
     %% clue 14 - the Norwegian lives next to the blue house
     person_HouseColor(Blue, blue),
-    member(Blue, Solution),
+    member(Blue, Persons),
     person_HouseNo(Blue, BlueHouseNo),
     member(BlueHouseNo, HouseNos),
 
@@ -169,12 +172,12 @@ solve(Solution) :-
 
     %% clue 15 - the man who smokes blend has a neighbor who drinks water
     person_Smoke(Blend, blend),
-    member(Blend, Solution),
+    member(Blend, Persons),
     person_HouseNo(Blend, BlendHouseNo),
     member(BlendHouseNo, HouseNos),
 
     person_Drink(Water, water),
-    member(Water, Solution),
+    member(Water, Persons),
     person_HouseNo(Water, WaterHouseNo),
     member(WaterHouseNo, HouseNos),
 
@@ -195,15 +198,9 @@ solve(Solution) :-
         [BritSmoke, SwedeSmoke, DaneSmoke, GermanSmoke, NorwegianSmoke]).
 
 
-
-
-
-
-
-
-
-
-
+ownerOfFish(Persons, Owner) :- 
+    solution(Persons),
+    member(person(Owner, _HouseColor, _HouseNo, _Drink, fish, _Smoke), Persons).
 
 
 
