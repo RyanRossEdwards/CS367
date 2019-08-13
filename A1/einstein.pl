@@ -1,5 +1,8 @@
-%% To run with 
+%% To run with  GNU Prolog
 %% $ gprolog --consult-file einstein.pl
+
+%% To run with SWI Prolog
+%% $ swipl -f einstein.pl
 
 :- use_module(library(lists)).  %% to load permutation/2
 
