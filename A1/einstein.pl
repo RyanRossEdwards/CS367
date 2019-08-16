@@ -202,7 +202,7 @@ solution(Persons) :-
 
 
 ownerOfFish(Persons, Owner) :- 
-    solution(Persons),
+    %% solution(Persons),
     member(person(Owner, _HouseColor, _HouseNo, _Drink, fish, _Smoke), Persons).
 
 

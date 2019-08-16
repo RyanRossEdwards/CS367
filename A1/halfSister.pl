@@ -1,6 +1,6 @@
 
 %% These are test cases
-
+/*
 female(mary).
 female(ann).
 
@@ -9,7 +9,7 @@ parentOf(ed, mary).
 
 parentOf(sue, ann).
 parentOf(sam, ann).
-
+*/
 %% This is the code
 
 halfSisterOf(X,Y) :-
