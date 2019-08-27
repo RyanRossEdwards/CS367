@@ -1,3 +1,5 @@
+%% RoadNetwork test cases
+
 one_city(RoadNetwork) :-
     [ (a, []) ] = RoadNetwork.
 
@@ -17,6 +19,7 @@ six_cities(RoadNetwork) :-
         (f, [(a, 6), (c, 9), (d, 7)])
     ] = RoadNetwork.
 
+%% Notes
 %% Usage example:
 %% six_cities(RoadNetwork), solution([a], RoadNetwork, SolutionCost, SolutionPath).
 
@@ -32,5 +35,144 @@ six_cities(RoadNetwork) :-
 %% Could change 'b' to 'Roads' above to get cost per road
 
 
+%% ?- reverse([1,2,3], X).
+%% X = [3, 2, 1].
+
+
+
+
+
+
+%% Usage example:
+%% two_cities(RoadNetwork), solution([a], RoadNetwork, SolutionCost, SolutionPath).
+%% six_cities(RoadNetwork), solution([a], RoadNetwork, SolutionCost, SolutionPath).
+
+
+
+
+
+
+%% %% goal_test(+Goal, +State)
+%% goal_test(Goal, State) :-
+%%     Goal = State.
+
+
+%% connected_city(+RoadNetwork, +State, -NextState, -Cost)
+connected_city(RoadNetwork, State, NextState, Cost) :-
+    member( (State, Edges), RoadNetwork),
+    member( (NextState, Cost), Edges).
+
+
+
+
+%% solution(+Path, +RoadNetwork, -SolutionCost, -SolutionPath)
+
+
+%% If Length is 1
 %% solution(Path, RoadNetwork, SolutionCost, SolutionPath) :-
+
+
+%% SolutionPath -> [1st,2nd,3rd]
+%% Path -> [3rd, 2nd, 1st]
+
+%% Base Case
+solution(Path, RoadNetwork, SolutionCost, SolutionPath) :-
+    length(RoadNetwork, Cities),
+    length(Path, Visited),
+    X is Cities + 1,
+    Visited = X,
+
+    reverse(Path, SolutionPath),
+
+    [Goal | _Rest] = SolutionPath,
+    [State | _Rest] = Path,
+    Goal = State,
+
+    SolutionCost = 0.
+
+
+
+%% solution(Path, RoadNetwork, SolutionCost, SolutionPath) :-
+%%     length(RoadNetwork, Cities),
+%%     length(Path, Visited), 
+%%     X is Cities + 1,
+%%     Visited = X,
+
+%%     reverse(Path, SolutionPath),
+
+%%     [Goal | _RestOfGoal] = SolutionPath,
+%%     [State | _RestOfState] = Path,
+
+%%     goal_test(Goal, State),
+
+%%     SolutionCost = 0.
+
+
+
+%% Recursive Case
+solution(Path, RoadNetwork, SolutionCost, SolutionPath) :-
+    %% Making it a depth limited search
+    length(RoadNetwork, Cities),
+    length(Path, Visited),
+    X is Cities + 1,
+    Visited < X,
+
+    %% Need to add code with a list of visited cities or might not work
+
+    [State | _Rest] = Path,
+    connected_city(RoadNetwork, State, NextState, Cost),
+
+
+    solution([NextState | Path], RoadNetwork, SolutionCost, SolutionPath).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
