@@ -49,34 +49,25 @@ six_cities(RoadNetwork) :-
 
 
 
-
-
-
-%% %% goal_test(+Goal, +State)
-%% goal_test(Goal, State) :-
-%%     Goal = State.
-
-
 %% connected_city(+RoadNetwork, +State, -NextState, -Cost)
 connected_city(RoadNetwork, State, NextState, Cost) :-
     member( (State, Edges), RoadNetwork),
     member( (NextState, Cost), Edges).
 
 
-
-
 %% solution(+Path, +RoadNetwork, -SolutionCost, -SolutionPath)
+%% This is for presentation / assignment requirements
+solution(Path, RoadNetwork, SolutionCost, SolutionPath) :-
+    solution_recursive(Path, RoadNetwork, [0], SolutionCost, SolutionPath).
 
-
-%% If Length is 1
-%% solution(Path, RoadNetwork, SolutionCost, SolutionPath) :-
 
 
 %% SolutionPath -> [1st,2nd,3rd]
 %% Path -> [3rd, 2nd, 1st]
 
+
 %% Base Case
-solution(Path, RoadNetwork, SolutionCost, SolutionPath) :-
+solution_recursive(Path, RoadNetwork, SolutionCostList, SolutionCost, SolutionPath) :-
     length(RoadNetwork, Cities),
     length(Path, Visited),
     X is Cities + 1,
@@ -88,29 +79,11 @@ solution(Path, RoadNetwork, SolutionCost, SolutionPath) :-
     [State | _Rest] = Path,
     Goal = State,
 
-    SolutionCost = 0.
-
-
-
-%% solution(Path, RoadNetwork, SolutionCost, SolutionPath) :-
-%%     length(RoadNetwork, Cities),
-%%     length(Path, Visited), 
-%%     X is Cities + 1,
-%%     Visited = X,
-
-%%     reverse(Path, SolutionPath),
-
-%%     [Goal | _RestOfGoal] = SolutionPath,
-%%     [State | _RestOfState] = Path,
-
-%%     goal_test(Goal, State),
-
-%%     SolutionCost = 0.
-
+    sum_list(SolutionCostList, SolutionCost).
 
 
 %% Recursive Case
-solution(Path, RoadNetwork, SolutionCost, SolutionPath) :-
+solution_recursive(Path, RoadNetwork, SolutionCostList, SolutionCost, SolutionPath) :-
     %% Making it a depth limited search
     length(RoadNetwork, Cities),
     length(Path, Visited),
@@ -123,7 +96,7 @@ solution(Path, RoadNetwork, SolutionCost, SolutionPath) :-
     connected_city(RoadNetwork, State, NextState, Cost),
 
 
-    solution([NextState | Path], RoadNetwork, SolutionCost, SolutionPath).
+    solution_recursive([NextState | Path], RoadNetwork, [Cost | SolutionCostList], SolutionCost, SolutionPath).
 
 
 
