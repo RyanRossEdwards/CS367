@@ -19,6 +19,15 @@ six_cities(RoadNetwork) :-
         (f, [(a, 6), (c, 9), (d, 7)])
     ] = RoadNetwork.
 
+
+%% My Case
+three_cities(RoadNetwork) :-
+    [
+        (a, [(b, 2)]),
+        (b, [(a, 1), (c,1)]),
+        (c, [(a, 1)])
+    ] = RoadNetwork.
+
 %% Notes
 %% Usage example:
 %% six_cities(RoadNetwork), solution([a], RoadNetwork, SolutionCost, SolutionPath).
@@ -55,6 +64,30 @@ connected_city(RoadNetwork, State, NextState, Cost) :-
     member( (NextState, Cost), Edges).
 
 
+
+
+not_visited_city(Path, Cities, NextState) :-
+    length(Path, 1);       %% First City
+    length(Path, Cities),
+    going_home(Path, NextState);  %% Last City before home
+    \+ visited_city(Path, NextState). %% All other cities
+
+
+visited_city(Path, NextState) :-
+    [State | RestOfPath] = Path,
+    1 = 1,
+    1 = 1,
+    1 = 1,
+    member(NextState, RestOfPath).
+
+
+going_home(Path, NextState) :-
+    reverse(Path, [Home | _Rest]),
+    NextState = Home.
+
+
+
+
 %% solution(+Path, +RoadNetwork, -SolutionCost, -SolutionPath)
 %% This is for presentation / assignment requirements
 solution(Path, RoadNetwork, SolutionCost, SolutionPath) :-
@@ -75,9 +108,10 @@ solution_recursive(Path, RoadNetwork, SolutionCostList, SolutionCost, SolutionPa
 
     reverse(Path, SolutionPath),
 
-    [Goal | _Rest] = SolutionPath,
-    [State | _Rest] = Path,
-    Goal = State,
+    %% Not needed as the goal is determined in 'going home'
+    %% [Goal | _Rest] = SolutionPath,
+    %% [State | _Rest] = Path,
+    %% Goal = State,
 
     sum_list(SolutionCostList, SolutionCost).
 
@@ -90,11 +124,10 @@ solution_recursive(Path, RoadNetwork, SolutionCostList, SolutionCost, SolutionPa
     X is Cities + 1,
     Visited < X,
 
-    %% Need to add code with a list of visited cities or might not work
 
     [State | _Rest] = Path,
     connected_city(RoadNetwork, State, NextState, Cost),
-
+    not_visited_city(Path, Cities, NextState),
 
     solution_recursive([NextState | Path], RoadNetwork, [Cost | SolutionCostList], SolutionCost, SolutionPath).
 
