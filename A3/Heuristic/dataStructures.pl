@@ -31,16 +31,23 @@ expand_OpenNode(OpenNode, Actions, SuccessorNodes) :-
     findall(ChildNode,
 	    (member((ChildState, ChildCost), SuccessorStateAndCosts),
 	     ChildGValue is ParentGValue + ChildCost,
-	     make_openNode([state(ChildState),
+	     
+         %% make_<constructor>(+Fields, -Record, -RestFields)
+         make_openNode(
+            [
+                state(ChildState),
 			    gValue(ChildGValue),
-			    parent(ParentState)],
-			   ChildNode)),
+                fValue(0),
+			    parent(ParentState)
+            ],
+			ChildNode)),
+
 	    SuccessorNodes),
     incrementCounter(expanded).
 
 
 /* structure of open and closed nodes */
-:- record openNode(state, gValue, parent).  
+:- record openNode(state, gValue, fValue, parent).  
 :- record closedNode(state, gValue, parent).
 
 
@@ -98,7 +105,7 @@ empty_OpenList(OpenList) :- empty_heap(OpenList).
 adding OpenNode with Priority to OldOpenList to get NewOpenList
 */
 add_OpenList(OldOpenList, Priority, OpenNode, NewOpenList) :-
-   add_to_heap(OldOpenList, Priority, OpenNode, NewOpenList).
+    add_to_heap(OldOpenList, Priority, OpenNode, NewOpenList).
 
 /*
 addList_OpenList(+ListNewOpenNodes, +OldOpenList, -NewOpenList)
@@ -108,12 +115,18 @@ value for OpenList
 
 */
 addList_OpenList(ListNewOpenNodes, OldOpenList, NewOpenList) :-
-   findall(GValue-OpenNode, 
-	   (member(OpenNode, ListNewOpenNodes),
-	    openNode_gValue(OpenNode, GValue)),
-	   NewOpenListNodes),
-   list_to_heap(NewOpenListNodes, NewHeap),
-   merge_heaps(NewHeap, OldOpenList, NewOpenList).
+   
+    %% findall(+Template, :Goal, -Bag)
+    findall(FValue-OpenNode, 
+	   (
+            member(OpenNode, ListNewOpenNodes),
+	        openNode_fValue(OpenNode, FValue)
+        ),
+	    NewOpenListNodes),
+
+    %% writeln(NewOpenListNodes),
+    list_to_heap(NewOpenListNodes, NewHeap),
+    merge_heaps(NewHeap, OldOpenList, NewOpenList).
 
    
 
