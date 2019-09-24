@@ -104,12 +104,7 @@ generate_FValue(Actions, [ChildNode | ChildNodeTail], NewList, NewChildrensNodes
     %% h(+State, +RoadNetwork, ?HValue)
     h(State, Actions, HValue),
 
-    %% For some unknown reason only sum_list works
     FValue is HValue + GValue,
-    %% writeln(ZValue),
-    %% add(HValue, GValue, FValue),
-    %% sum_list([HValue,GValue], FValue),
-    %% writeln(FValue),
 
     %% make_<constructor>(+Fields, -Record, -RestFields)
     make_openNode(
