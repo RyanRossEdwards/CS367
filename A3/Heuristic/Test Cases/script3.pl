@@ -59,6 +59,14 @@ example5(
     (c, [(a, 14), (b, 15), (d, 29)]),
     (d, [(a, 17), (b, 18), (c, 29)])]).
 
+myexample1(
+    [(a, [])]).
+
+myexample2(
+    [(a, [(b, 12)]),
+    (b,  [(a, 12)])
+    ]).
+
 runExample(ExName, SolutionCost, SolutionPath, NodesExpanded) :-
     Example =.. [ExName, RoadNetwork],
     call(Example),

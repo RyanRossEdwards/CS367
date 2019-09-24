@@ -3,10 +3,17 @@
 h(State, RoadNetwork, HValue) :-
     %% Gets the states from the record in tsp.pl
     state_stillToVisitCitySet(State, UnvisitedList),
-
     get_Inbound_List(RoadNetwork, UnvisitedList, MinInboundList),
     sum_list(MinInboundList, HValue).
 
+%% State
+%% state(b,[a,c,d,e])
+%% state(c,[a,b,d,e])
+%% state(d,[a,b,c,e])
+%% state(e,[a,b,c,d])
+%% state(a,[b,c,d,e])
+
+%% stillToVisitCitySet gets UnvisitedList
 
 %% UnvisitedList:
 %% [a,c,d,e]
