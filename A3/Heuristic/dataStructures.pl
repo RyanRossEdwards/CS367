@@ -136,7 +136,7 @@ get_OpenList(+OldOpenList, -Priority, -OpenNode, -NewOpenList)
 removes the least Priority (i.e., the best) OpenNode from OldOpenList giving NewOpenList
 */
 get_OpenList(OldOpenList, Priority, OpenNode, NewOpenList) :-
-   get_from_heap(OldOpenList, Priority, OpenNode, NewOpenList).
+    get_from_heap(OldOpenList, Priority, OpenNode, NewOpenList).
 
 /* 
 min_OpenList(+OpenList, -Priority, -OpenNode)
@@ -145,7 +145,7 @@ returns the least Priority OpenNode from OpenList without "removing" it
  
 */
 min_OpenList(OpenList, Priority, OpenNode) :-
-   min_of_heap(OpenList, Priority, OpenNode).
+    min_of_heap(OpenList, Priority, OpenNode).
 
 /*ClosedList predicates
 =========================*/

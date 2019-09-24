@@ -73,40 +73,43 @@ solution(Actions, GoalState, OpenList, ClosedList, SolutionCost, SolutionPath) :
        add_ClosedList(ClosedList, ParentState, ClosedNode, NewClosedList),
        expand_OpenNode(ParentOpenNode, Actions, ChildrenNodes),
 
-       function(Actions, ChildrenNodes, [], NewChildrensNodes),
+       generate_FValue(Actions, ChildrenNodes, [], NewChildrensNodes),
        
        addList_OpenList(NewChildrensNodes, ParentRemovedOpenList, NewOpenList))),
    solution(Actions, GoalState, NewOpenList, NewClosedList, SolutionCost, SolutionPath).
 
 
+/* Recursive case
+This goes through every child node (from ChildrenNodes) and adds the
+f(n) value 'FValue' to the data structure. The list which now includes
+children nodes with FValues is then used for addList_OpenList.
+
+addList_OpenList is modified to add to the heap based on FValue.
+*/
+
+
 %% Base Case
-function(Actions, [], NewList, NewChildrensNodes) :-
+generate_FValue(Actions, [], NewList, NewChildrensNodes) :-
     %% Final list is New list
     NewChildrensNodes = NewList.
 
+%% Recursive Case
+generate_FValue(Actions, [ChildNode | ChildNodeTail], NewList, NewChildrensNodes) :-
+    
+    %% Load the stored values from the data
+    openNode_state(ChildNode, State),
+    openNode_gValue(ChildNode, GValue),
+    openNode_parent(ChildNode, ParentState),
 
-function(Actions, [Head | Tail], NewList, NewChildrensNodes) :-
-    %% Head
-    %% h(Head),
-    %% Add to the HValue to the GValue
-    %% Head,
-    %% change_GValue(Actions, Head, NewHead),
-
-
-    openNode_gValue(Head, GValue),
-    openNode_state(Head, State),
-    openNode_parent(Head, ParentState),
-
-    %% state_getvalue(State, )
-
+    %% h(+State, +RoadNetwork, ?HValue)
     h(State, Actions, HValue),
 
-    %% writeln(HValue),
-
+    %% For some unknown reason only sum_list works
     %% FValue = HValue + GValue,
     %% add(HValue, GValue, FValue),
     sum_list([HValue,GValue], FValue),
 
+    %% make_<constructor>(+Fields, -Record, -RestFields)
     make_openNode(
         [
             state(State),
@@ -114,13 +117,9 @@ function(Actions, [Head | Tail], NewList, NewChildrensNodes) :-
             fValue(FValue),
             parent(ParentState)
         ],
-        ChildNode),
+        NewChildNode),
 
-    %% set_<name>_of_<constructor>(+Value, !Record)
-    %% set_gValue_of_openNode(FValue, Head),
-
-    %% function(Tail, [NewHead | NewList], NewChildrensNodes).
-    function(Actions, Tail, [ChildNode | NewList], NewChildrensNodes).
+    generate_FValue(Actions, ChildNodeTail, [NewChildNode | NewList], NewChildrensNodes).
 
 
 
